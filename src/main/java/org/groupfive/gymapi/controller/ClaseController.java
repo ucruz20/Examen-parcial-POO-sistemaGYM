@@ -2,6 +2,9 @@ package org.groupfive.gymapi.controller;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.groupfive.gymapi.model.Clase;
+import org.groupfive.gymapi.service.ClaseService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -11,15 +14,22 @@ import org.springframework.web.bind.annotation.RequestBody;
 @RequestMapping("/api/clases")
 public class ClaseController {
 
+    @Autowired
+    private ClaseService claseService;
+
     @PostMapping("/crear")
     public ResponseEntity<String> crearClase(@RequestBody String clase) {
         //TODO: crear clase con el servicio ClaseService
-        return ResponseEntity.ok("creando clase: " + clase);
+        Clase nuevaClase = claseService.crearClase(1L, clase, 5, "", "");
+        return ResponseEntity.ok("creando clase: " + nuevaClase.getNombre());
     }
 
     @PostMapping("/{idClase}/inscribir/{idMiembro}")
     public ResponseEntity<String> inscribirMiembro(@PathVariable Long idClase, @PathVariable Long idMiembro) {
         //TODO: inscribir miembro con el servicio ClaseService
-        return ResponseEntity.ok("incribir al miembro " + idMiembro + " en la clase " + idClase);
+        boolean resultado = claseService.inscribirMiembro(idClase, idMiembro);
+        return resultado ?
+            ResponseEntity.ok("Miembro inscrito con exito") :
+            ResponseEntity.badRequest().body("Cupo lleno o ya inscrito");
     }
 }
