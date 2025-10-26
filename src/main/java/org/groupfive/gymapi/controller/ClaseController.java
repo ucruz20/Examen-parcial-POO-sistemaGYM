@@ -2,6 +2,7 @@ package org.groupfive.gymapi.controller;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.groupfive.gymapi.dto.ClaseDTO;
 import org.groupfive.gymapi.model.Clase;
 import org.groupfive.gymapi.service.ClaseService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,9 +19,8 @@ public class ClaseController {
     private ClaseService claseService;
 
     @PostMapping("/crear")
-    public ResponseEntity<String> crearClase(@RequestBody String clase) {
-        //TODO: crear clase con el servicio ClaseService
-        Clase nuevaClase = claseService.crearClase(1L, clase, 5, "", "");
+    public ResponseEntity<String> crearClase(@RequestBody ClaseDTO claseDTO) {
+        Clase nuevaClase = claseService.crearClase(claseDTO);
         return ResponseEntity.ok("creando clase: " + nuevaClase.getNombre());
     }
 

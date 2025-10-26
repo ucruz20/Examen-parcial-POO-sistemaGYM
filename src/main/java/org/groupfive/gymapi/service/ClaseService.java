@@ -3,6 +3,7 @@ package org.groupfive.gymapi.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.groupfive.gymapi.dto.ClaseDTO;
 import org.groupfive.gymapi.model.Clase;
 import org.springframework.stereotype.Service;
 
@@ -11,9 +12,14 @@ public class ClaseService {
 
     private List<Clase> clases = new ArrayList<>(); // TODO: utilizar repositorio ClaseRepository
 
-    // TODO: crear clase utilizando ClaseDTO
-    public Clase crearClase(Long id, String nombre, int cupoMaximo, String horario, String entrenador) {
-        Clase clase = new Clase(id, nombre, cupoMaximo, horario, entrenador, new ArrayList<>());
+    public Clase crearClase(ClaseDTO dto) {
+        Clase clase = new Clase();
+        clase.setId(dto.getId());
+        clase.setNombre(dto.getNombre());
+        clase.setHorario(dto.getHorario());
+        clase.setCupoMaximo(dto.getCupoMaximo());
+        clase.setEntrenador(dto.getEntrenador());
+        clase.setInscritos(new ArrayList<String>());
         clases.add(clase);
         return clase;
     }
