@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.groupfive.gymapi.dto.ClaseDTO;
+import org.groupfive.gymapi.dto.CrearClaseDTO;
 import org.groupfive.gymapi.model.Clase;
 import org.springframework.stereotype.Service;
 
@@ -12,16 +13,24 @@ public class ClaseService {
 
     private List<Clase> clases = new ArrayList<>(); // TODO: utilizar repositorio ClaseRepository
 
-    public Clase crearClase(ClaseDTO dto) {
+    public List<ClaseDTO> obtenerClases() {
+        List<ClaseDTO> clasesDTO = new ArrayList<>();
+        for (Clase clase : clases) {
+            clasesDTO.add(convertirClaseAClaseDTO(clase));
+        }
+        return clasesDTO;
+    }
+
+    public ClaseDTO crearClase(CrearClaseDTO crearClaseDTO) {
         Clase clase = new Clase();
-        clase.setId(dto.getId());
-        clase.setNombre(dto.getNombre());
-        clase.setHorario(dto.getHorario());
-        clase.setCupoMaximo(dto.getCupoMaximo());
-        clase.setEntrenador(dto.getEntrenador());
+        clase.setId( Long.valueOf(clases.size()) );
+        clase.setNombre(crearClaseDTO.getNombre());
+        clase.setHorario(crearClaseDTO.getHorario());
+        clase.setCupoMaximo(crearClaseDTO.getCupoMaximo());
+        clase.setEntrenador(crearClaseDTO.getEntrenador());
         clase.setInscritos(new ArrayList<String>());
         clases.add(clase);
-        return clase;
+        return convertirClaseAClaseDTO(clase);
     }
 
     public boolean inscribirMiembro(Long idClase, Long idMiembro) {
@@ -46,4 +55,13 @@ public class ClaseService {
         return true;
     }
 
+    private ClaseDTO convertirClaseAClaseDTO(Clase clase) {
+        ClaseDTO claseDTO = new ClaseDTO();
+        claseDTO.setId(clase.getId());
+        claseDTO.setNombre(clase.getNombre());
+        claseDTO.setCupoMaximo(clase.getCupoMaximo());
+        claseDTO.setHorario(clase.getHorario());
+        claseDTO.setEntrenador(clase.getEntrenador());
+        return claseDTO;
+    }
 }
