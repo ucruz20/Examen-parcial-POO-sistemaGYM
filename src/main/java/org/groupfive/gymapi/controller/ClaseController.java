@@ -2,24 +2,26 @@ package org.groupfive.gymapi.controller;
 
 import java.util.List;
 
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 import org.groupfive.gymapi.dto.ClaseDTO;
 import org.groupfive.gymapi.dto.CrearClaseDTO;
 import org.groupfive.gymapi.service.ClaseService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.PutMapping;
+
 
 @RestController
 @RequestMapping("/api/clases")
+@RequiredArgsConstructor
 public class ClaseController {
-
-    @Autowired
-    private ClaseService claseService;
+    private final ClaseService claseService;
 
     @GetMapping
     public ResponseEntity<List<ClaseDTO>> verClases() {
@@ -38,6 +40,22 @@ public class ClaseController {
         boolean resultado = claseService.inscribirMiembro(idClase, idMiembro);
         return resultado ?
             ResponseEntity.ok("Miembro inscrito con exito") :
-            ResponseEntity.badRequest().body("Cupo lleno o ya inscrito");
+            ResponseEntity.status(409).body("Cupo lleno o ya inscrito");
+    }
+
+    @PutMapping("/{idClase}/editar")
+    public ResponseEntity<ClaseDTO> editarInfo(@PathVariable Long idClase, @RequestBody CrearClaseDTO clase) {
+        ClaseDTO claseEditada = claseService.editarInfo(idClase, clase);
+        return (claseEditada != null) ?
+            ResponseEntity.ok(claseEditada) :
+            ResponseEntity.notFound().build();
+    }
+
+    @DeleteMapping("/{idClase}")
+    public ResponseEntity<String> eliminar(@PathVariable Long idClase) {
+        boolean respuesta = claseService.eliminar(idClase);
+        return respuesta ?
+            ResponseEntity.ok("Clase eliminada con exito") :
+            ResponseEntity.notFound().build();
     }
 }
