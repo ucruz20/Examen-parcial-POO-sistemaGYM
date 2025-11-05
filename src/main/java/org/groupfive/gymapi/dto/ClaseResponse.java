@@ -7,9 +7,10 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class CrearClaseDTO {
+public class ClaseResponse {
+    private Long id;
     private String nombre;
     private int cupoMaximo;
     private String horario;
-    private String entrenador; // TODO: usar modelo Entrenador
+    private Long entrenadorId;
 }

@@ -2,8 +2,8 @@ package org.groupfive.gymapi.controller;
 
 import java.util.List;
 
-import org.groupfive.gymapi.dto.ClaseDTO;
-import org.groupfive.gymapi.dto.CrearClaseDTO;
+import org.groupfive.gymapi.dto.ClaseResponse;
+import org.groupfive.gymapi.dto.ClaseRequest;
 import org.groupfive.gymapi.service.ClaseService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -24,15 +24,15 @@ public class ClaseController {
     private final ClaseService claseService;
 
     @GetMapping
-    public ResponseEntity<List<ClaseDTO>> verClases() {
-        List<ClaseDTO> clases = claseService.obtenerClases();
+    public ResponseEntity<List<ClaseResponse>> verClases() {
+        List<ClaseResponse> clases = claseService.obtenerClases();
         return ResponseEntity.ok(clases);
     }
 
     @PostMapping("/crear")
-    public ResponseEntity<ClaseDTO> crearClase(@RequestBody CrearClaseDTO crearClaseDTO) {
-        ClaseDTO nuevaClaseDTO = claseService.crearClase(crearClaseDTO);
-        return ResponseEntity.ok(nuevaClaseDTO);
+    public ResponseEntity<ClaseResponse> crearClase(@RequestBody ClaseRequest ClaseRequest) {
+        ClaseResponse nuevaClaseResponse = claseService.crearClase(ClaseRequest);
+        return ResponseEntity.ok(nuevaClaseResponse);
     }
 
     @PostMapping("/{idClase}/inscribir/{idMiembro}")
@@ -44,8 +44,8 @@ public class ClaseController {
     }
 
     @PutMapping("/{idClase}/editar")
-    public ResponseEntity<ClaseDTO> editarInfo(@PathVariable Long idClase, @RequestBody CrearClaseDTO clase) {
-        ClaseDTO claseEditada = claseService.editarInfo(idClase, clase);
+    public ResponseEntity<ClaseResponse> editarInfo(@PathVariable Long idClase, @RequestBody ClaseRequest clase) {
+        ClaseResponse claseEditada = claseService.editarInfo(idClase, clase);
         return (claseEditada != null) ?
             ResponseEntity.ok(claseEditada) :
             ResponseEntity.notFound().build();

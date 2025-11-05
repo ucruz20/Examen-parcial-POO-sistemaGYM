@@ -14,6 +14,6 @@ public class Clase {
     private String nombre;
     private int cupoMaximo;
     private String horario;
-    private String entrenador; // TODO: usar modelo Entrenador
-    private List<String> inscritos; // TODO: usar modelo Miembro
+    private Long entrenadorId;
+    private List<Long> inscritos;
 }
