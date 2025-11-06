@@ -1,19 +1,25 @@
 package org.groupfive.gymapi.model;
 
+import jakarta.persistence.*;
+import lombok.Data;
+import java.time.LocalDate;
 import java.util.List;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
+@Entity
+@Table(name = "clase")
 public class Clase {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private String nombre;
-    private int cupoMaximo;
+    private String instructor;
+    private LocalDate fecha;
     private String horario;
-    private String entrenador; // TODO: usar modelo Entrenador
-    private List<String> inscritos; // TODO: usar modelo Miembro
+
+    @OneToMany(mappedBy = "clase", cascade = CascadeType.ALL)
+    private List<Inscripcion> inscripciones;
 }
+

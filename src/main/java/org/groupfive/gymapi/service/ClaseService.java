@@ -81,4 +81,6 @@ public class ClaseService {
         claseDTO.setEntrenador(clase.getEntrenador());
         return claseDTO;
     }
+
 }
+
