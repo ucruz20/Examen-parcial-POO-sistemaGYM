@@ -34,7 +34,7 @@ public class AsistenciaService {
         AsistenciaResponseDTO dto = new AsistenciaResponseDTO();
         dto.setIdAsistencia(asistencia.getIdAsistencia());
         dto.setIdMiembro(asistencia.getMiembro().getId());
-        dto.setIdClase(asistencia.getSesion().getId());
+        dto.setIdClase(asistencia.getClase().getId());
         dto.setFechaHora(asistencia.getFechaHora());
         dto.setPresente(asistencia.isPresente());
         return dto;

@@ -1,5 +1,7 @@
 package org.groupfive.gymapi.dto;
 
+import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.PositiveOrZero;
 import lombok.Data;
 import jakarta.validation.constraints.NotNull;
 import java.math.BigDecimal;
@@ -10,7 +12,6 @@ public class EntrenadorRequestDTO {
     private String nombre;
     @NotNull
     private String especialidad;
-    private String horario;
-    @NotNull
+    @PositiveOrZero
     private BigDecimal salario;
 }

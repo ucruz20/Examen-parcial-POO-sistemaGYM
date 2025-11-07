@@ -48,10 +48,6 @@ public class EntrenadorService {
         Clase clase = claseRepository.findById(claseId)
                 .orElseThrow(() -> new RuntimeException("Clase no encontrada."));
 
-        // TODO: resolver metodos del repositorio
-        // if (!inscripcionRepository.existsByMiembro_IdAndClase_IdSesion(miembroId, claseId)) {
-        //     throw new RuntimeException("Error: El miembro NO está inscrito en esta clase.");
-        // }
 
         LocalDateTime startOfDay = LocalDate.now().atStartOfDay();
         LocalDateTime endOfDay = LocalDate.now().atTime(23, 59, 59);
@@ -62,7 +58,7 @@ public class EntrenadorService {
 
         Asistencia asistencia = new Asistencia();
         asistencia.setMiembro(miembro);
-        asistencia.setSesion(clase);
+        asistencia.setClase(clase);
         asistencia.setPresente(true);
 
         asistenciaRepository.save(asistencia);

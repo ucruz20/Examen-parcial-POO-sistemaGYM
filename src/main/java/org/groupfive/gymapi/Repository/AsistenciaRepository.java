@@ -7,5 +7,6 @@ import java.time.LocalDateTime;
 
 @Repository
 public interface AsistenciaRepository extends JpaRepository<Asistencia, Long> {
-    boolean existsByMiembro_IdAndSesion_IdSesionAndFechaHoraBetween(Long idMiembro, Long idClase, LocalDateTime startOfDay, LocalDateTime endOfDay);
+    boolean existsByMiembro_IdAndClase_IdAndFechaHoraBetween(
+            Long idMiembro, Long idClase, LocalDateTime inicio, LocalDateTime fin);
 }
