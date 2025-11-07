@@ -7,6 +7,7 @@ import java.util.Map;
 import org.groupfive.gymapi.dto.ClaseResponse;
 import org.groupfive.gymapi.dto.ClaseRequest;
 import org.groupfive.gymapi.model.Clase;
+import org.groupfive.gymapi.model.Inscripcion;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
@@ -33,25 +34,10 @@ public class ClaseService {
         clase.setHorario(crearClaseDTO.getHorario());
         clase.setCupoMaximo(crearClaseDTO.getCupoMaximo());
         clase.setEntrenadorId(crearClaseDTO.getEntrenadorId());
-        clase.setInscritos(new ArrayList<Long>());
+        clase.setInscritos(new ArrayList<Inscripcion>());
         clasesIndex++;
         clases.put(clase.getId(), clase);
         return convertirClaseAClaseDTO(clase);
-    }
-
-    public boolean inscribirMiembro(Long idClase, Long idMiembro) {
-        Clase clase = clases.get(idClase);
-        
-        if (clase == null) return false;
-
-        if (clase.getInscritos().contains(idMiembro))
-            return false;
-
-        if (clase.getInscritos().size() >= clase.getCupoMaximo())
-            return false;
-        
-        clase.getInscritos().add(idMiembro);
-        return true;
     }
 
     public ClaseResponse editarInfo(Long idClase, ClaseRequest clase) {
@@ -80,4 +66,6 @@ public class ClaseService {
         claseDTO.setEntrenadorId(clase.getEntrenadorId());
         return claseDTO;
     }
+
 }
+

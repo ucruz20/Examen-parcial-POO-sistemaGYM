@@ -35,14 +35,6 @@ public class ClaseController {
         return ResponseEntity.ok(nuevaClaseResponse);
     }
 
-    @PostMapping("/{idClase}/inscribir/{idMiembro}")
-    public ResponseEntity<String> inscribirMiembro(@PathVariable Long idClase, @PathVariable Long idMiembro) {
-        boolean resultado = claseService.inscribirMiembro(idClase, idMiembro);
-        return resultado ?
-            ResponseEntity.ok("Miembro inscrito con exito") :
-            ResponseEntity.status(409).body("Cupo lleno o ya inscrito");
-    }
-
     @PutMapping("/{idClase}/editar")
     public ResponseEntity<ClaseResponse> editarInfo(@PathVariable Long idClase, @RequestBody ClaseRequest clase) {
         ClaseResponse claseEditada = claseService.editarInfo(idClase, clase);

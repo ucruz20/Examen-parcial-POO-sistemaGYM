@@ -1,21 +1,13 @@
 package org.groupfive.gymapi.model;
 
+import jakarta.persistence.*;
+import lombok.Data;
+import java.time.LocalDateTime;
 import java.util.List;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
-@Entity
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
+@Entity
+@Table(name = "clase")
 public class Clase {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,11 +21,12 @@ public class Clase {
     private int cupoMaximo;
 
     @Column(name = "horario", nullable = false)
-    private String horario;
+    private LocalDateTime horario;
     
     @ManyToOne(optional = false)
     @Column(name = "id_entrenador")
     private Long entrenadorId;
 
-    private List<Long> inscritos;
+    @OneToMany(mappedBy = "clase", cascade = CascadeType.ALL)
+    private List<Inscripcion> inscritos;
 }

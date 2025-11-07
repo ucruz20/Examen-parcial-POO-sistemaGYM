@@ -1,5 +1,7 @@
 package org.groupfive.gymapi.dto;
 
+import java.time.LocalDateTime;
+
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -17,7 +19,7 @@ public class ClaseRequest {
     private int cupoMaximo;
 
     @NotBlank
-    private String horario;
+    private LocalDateTime horario;
 
     @NotNull
     private Long entrenadorId;
