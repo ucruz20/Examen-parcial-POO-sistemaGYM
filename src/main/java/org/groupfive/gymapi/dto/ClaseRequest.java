@@ -1,5 +1,6 @@
 package org.groupfive.gymapi.dto;
 
+import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -7,10 +8,17 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ClaseDTO {
-    private Long id;
+public class ClaseRequest {
+    @NotBlank
     private String nombre;
+
+    @NotNull
+    @Min(1)
     private int cupoMaximo;
+
+    @NotBlank
     private String horario;
-    private String entrenador; // TODO: usar modelo Entrenador
+
+    @NotNull
+    private Long entrenadorId;
 }
