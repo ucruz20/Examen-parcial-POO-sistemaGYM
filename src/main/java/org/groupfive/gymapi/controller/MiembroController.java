@@ -1,6 +1,8 @@
 package org.groupfive.gymapi.controller;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.groupfive.gymapi.dto.MiembroRequestDto;
 import org.groupfive.gymapi.model.Miembro;
 import org.groupfive.gymapi.service.MiembroService;
 import org.springframework.http.ResponseEntity;
@@ -21,8 +23,12 @@ public class MiembroController {
     }
 
     @PostMapping
-    public Miembro crear(@RequestBody Miembro miembro) {
+    public Miembro crear(@Valid @RequestBody Miembro miembro) {
         return miembroService.guardar(miembro);
+    }
+
+    @PutMapping(value="/{id}") Miembro actualizar(@PathVariable Long id, @Valid @RequestBody MiembroRequestDto request) {
+        return miembroService.actualizar(id, request);
     }
 
     @GetMapping("/{id}")

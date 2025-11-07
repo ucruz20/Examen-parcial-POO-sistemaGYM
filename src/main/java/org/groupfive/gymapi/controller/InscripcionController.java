@@ -21,8 +21,12 @@ public class InscripcionController {
     }
 
     @PostMapping
-    public Inscripcion crear(@RequestBody Inscripcion inscripcion) {
-        return inscripcionService.guardar(inscripcion);
+    public ResponseEntity<Inscripcion> crearInscripcion(
+            @RequestParam Long miembroId,
+            @RequestParam Long claseId) {
+
+        Inscripcion inscripcion = inscripcionService.guardar(miembroId, claseId);
+        return ResponseEntity.ok(inscripcion);
     }
 
     @GetMapping("/{id}")
@@ -33,7 +37,8 @@ public class InscripcionController {
     }
 
     @DeleteMapping("/{id}")
-    public void eliminar(@PathVariable Long id) {
+    public ResponseEntity<String> eliminar(@PathVariable Long id) {
         inscripcionService.eliminar(id);
+        return ResponseEntity.ok("Inscripción eliminada correctamente");
     }
 }

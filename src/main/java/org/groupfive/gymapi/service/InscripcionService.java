@@ -1,9 +1,10 @@
 package org.groupfive.gymapi.service;
 
 import lombok.RequiredArgsConstructor;
-import org.groupfive.gymapi.model.Inscripcion;
-import org.groupfive.gymapi.Repository.InscripcionRepository;
+import org.groupfive.gymapi.model.*;
+import org.groupfive.gymapi.Repository.*;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -12,7 +13,10 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class InscripcionService {
+
     private final InscripcionRepository inscripcionRepository;
+    private final MiembroRepository miembroRepository;
+    private final ClaseRepository claseRepository;
 
     public List<Inscripcion> listar() {
         return inscripcionRepository.findAll();
@@ -22,20 +26,30 @@ public class InscripcionService {
         return inscripcionRepository.findById(id);
     }
 
-    public Inscripcion guardar(Inscripcion inscripcion) {
-        Long idClase = inscripcion.getClase().getId();
-        Long idMiembro = inscripcion.getMiembro().getId();
+    @Transactional
+    public Inscripcion guardar(Long miembroId, Long claseId) {
+        Miembro miembro = miembroRepository.findById(miembroId)
+                .orElseThrow(() -> new RuntimeException("Miembro no encontrado"));
 
-        boolean yaInscrito = inscripcionRepository.existsByMiembro_IdAndClase_Id(idMiembro, idClase);
-        if(yaInscrito){
-            throw new RuntimeException("El miembro ya existe");
+        Clase clase = claseRepository.findById(claseId)
+                .orElseThrow(() -> new RuntimeException("Clase no encontrada"));
+
+        boolean yaInscrito = inscripcionRepository.existsByMiembro_IdAndClase_Id(miembroId, claseId);
+        if (yaInscrito) {
+            throw new RuntimeException("El miembro ya está inscrito en esta clase");
         }
-        long inscritos = inscripcionRepository.countByClase_Id(idClase);
-        if(inscritos >= inscripcion.getClase().getCupoMaximo()){
-            throw new RuntimeException("El cupo maximo ya existe");
+
+        long inscritos = inscripcionRepository.countByClase_Id(claseId);
+        if (inscritos >= clase.getCupoMaximo()) {
+            throw new RuntimeException("La clase ya alcanzó su cupo máximo");
         }
+
+        Inscripcion inscripcion = new Inscripcion();
+        inscripcion.setMiembro(miembro);
+        inscripcion.setClase(clase);
         inscripcion.setFechaInscripcion(LocalDate.now());
         inscripcion.setEstado("ACTIVA");
+
         return inscripcionRepository.save(inscripcion);
     }
 
