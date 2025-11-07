@@ -2,11 +2,15 @@ package org.groupfive.gymapi.service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
+import java.util.Optional;
 
+import org.groupfive.gymapi.Repository.ClaseRepository;
+import org.groupfive.gymapi.Repository.EntrenadorRepository;
 import org.groupfive.gymapi.dto.ClaseResponse;
 import org.groupfive.gymapi.dto.ClaseRequest;
+import org.groupfive.gymapi.dto.EntrenadorResumen;
 import org.groupfive.gymapi.model.Clase;
+import org.groupfive.gymapi.model.Entrenador;
 import org.groupfive.gymapi.model.Inscripcion;
 import org.springframework.stereotype.Service;
 
@@ -16,56 +20,70 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ClaseService {
 
-    private final Map<Long, Clase> clases; // TODO: utilizar repositorio ClaseRepository
-    private long clasesIndex = 0L;
+    private final ClaseRepository claseRepository;
+    private final EntrenadorRepository entrenadorRepository;
 
-    public List<ClaseResponse> obtenerClases() {
-        List<ClaseResponse> clasesDTO = new ArrayList<>();
-        for (Clase clase : clases.values()) {
-            clasesDTO.add(convertirClaseAClaseDTO(clase));
+    public List<ClaseResponse> getClasses() {
+        List<ClaseResponse> classesDTO = new ArrayList<>();
+        for (Clase clase : claseRepository.findAll()) {
+            classesDTO.add(toResponse(clase));
         }
-        return clasesDTO;
+        return classesDTO;
     }
 
-    public ClaseResponse crearClase(ClaseRequest crearClaseDTO) {
-        Clase clase = new Clase();
-        clase.setId(clasesIndex);
-        clase.setNombre(crearClaseDTO.getNombre());
-        clase.setHorario(crearClaseDTO.getHorario());
-        clase.setCupoMaximo(crearClaseDTO.getCupoMaximo());
-        clase.setEntrenadorId(crearClaseDTO.getEntrenadorId());
-        clase.setInscritos(new ArrayList<Inscripcion>());
-        clasesIndex++;
-        clases.put(clase.getId(), clase);
-        return convertirClaseAClaseDTO(clase);
+    public ClaseResponse createClass(ClaseRequest createClassDTO) {
+        Entrenador trainer = entrenadorRepository.findById(createClassDTO.getEntrenadorId())
+                .orElseThrow(()-> new RuntimeException("ENtrenador no encontrado"));
+;
+            Clase clase = new Clase();
+            clase.setNombre(createClassDTO.getNombre());
+            clase.setHorario(createClassDTO.getHorario());
+            clase.setCupoMaximo(createClassDTO.getCupoMaximo());
+            clase.setEntrenador(trainer);
+            clase.setInscritos(new ArrayList<Inscripcion>());
+            claseRepository.save(clase);
+            return toResponse(clase);
     }
 
-    public ClaseResponse editarInfo(Long idClase, ClaseRequest clase) {
-        Clase claseActual = clases.get(idClase);
-        if (claseActual == null) return null;
-        claseActual.setNombre(clase.getNombre());
-        claseActual.setHorario(clase.getHorario());
-        claseActual.setCupoMaximo(clase.getCupoMaximo());
-        claseActual.setEntrenadorId(clase.getEntrenadorId());
-        return convertirClaseAClaseDTO(claseActual);
+    public ClaseResponse editorInfo(Long idClass, ClaseRequest classRequest) {
+        Clase classActual = claseRepository.findById(idClass)
+                .orElseThrow(()-> new RuntimeException("Clase no encontrado"));
+
+
+
+            Entrenador trainerActual = entrenadorRepository.findById(classActual.getEntrenador().getId())
+                    .orElseThrow(()-> new RuntimeException("Entrenador no encontrado"));
+
+                Clase c = new Clase();
+                c.setNombre(classRequest.getNombre());
+                c.setHorario(classRequest.getHorario());
+                c.setCupoMaximo(classRequest.getCupoMaximo());
+                c.setEntrenador(trainerActual);
+                return toResponse(classActual);
+
     }
 
-    public boolean eliminar(Long idClase) {
-        if (!clases.containsKey(idClase))
-            return false;
-        clases.remove(idClase);
-        return true;
+    public void eliminate(Long idClass) {
+        if (!claseRepository.existsById(idClass))
+            throw new RuntimeException("Clase no encontrado");
+        claseRepository.deleteById(idClass);
+
     }
 
-    private ClaseResponse convertirClaseAClaseDTO(Clase clase) {
-        ClaseResponse claseDTO = new ClaseResponse();
-        claseDTO.setId(clase.getId());
-        claseDTO.setNombre(clase.getNombre());
-        claseDTO.setCupoMaximo(clase.getCupoMaximo());
-        claseDTO.setHorario(clase.getHorario());
-        claseDTO.setEntrenadorId(clase.getEntrenadorId());
-        return claseDTO;
+    private ClaseResponse toResponse(Clase clase) {
+        return new ClaseResponse(
+                clase.getId(),
+                clase.getNombre(),
+                clase.getCupoMaximo(),
+                clase.getHorario(),
+                new EntrenadorResumen(
+                        clase.getEntrenador().getId(),
+                        clase.getEntrenador().getNombre(),
+                        clase.getEntrenador().getEspecialidad()
+                )
+        );
     }
+
 
 }
 

@@ -2,9 +2,10 @@ package org.groupfive.gymapi.service;
 
 import lombok.RequiredArgsConstructor;
 import org.groupfive.gymapi.model.Inscripcion;
-import org.groupfive.gymapi.repository.InscripcionRepository;
+import org.groupfive.gymapi.Repository.InscripcionRepository;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,6 +23,19 @@ public class InscripcionService {
     }
 
     public Inscripcion guardar(Inscripcion inscripcion) {
+        Long idClase = inscripcion.getClase().getId();
+        Long idMiembro = inscripcion.getMiembro().getId();
+
+        boolean yaInscrito = inscripcionRepository.existsByMiembro_IdAndClase_Id(idMiembro, idClase);
+        if(yaInscrito){
+            throw new RuntimeException("El miembro ya existe");
+        }
+        long inscritos = inscripcionRepository.countByClase_Id(idClase);
+        if(inscritos >= inscripcion.getClase().getCupoMaximo()){
+            throw new RuntimeException("El cupo maximo ya existe");
+        }
+        inscripcion.setFechaInscripcion(LocalDate.now());
+        inscripcion.setEstado("ACTIVA");
         return inscripcionRepository.save(inscripcion);
     }
 

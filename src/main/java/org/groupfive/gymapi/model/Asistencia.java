@@ -18,7 +18,7 @@ public class Asistencia {
     private Miembro miembro;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_clase", nullable = false)
-    private Clase sesion;
+    private Clase clase;
     private LocalDateTime fechaHora = LocalDateTime.now();
     private boolean presente = true;
 }

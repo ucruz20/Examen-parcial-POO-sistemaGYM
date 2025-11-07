@@ -2,7 +2,7 @@ package org.groupfive.gymapi.service;
 
 import lombok.RequiredArgsConstructor;
 import org.groupfive.gymapi.model.Miembro;
-import org.groupfive.gymapi.repository.MiembroRepository;
+import org.groupfive.gymapi.Repository.MiembroRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,7 +18,8 @@ public class MiembroService {
     }
 
     public Optional<Miembro> obtenerPorId(Long id) {
-        return miembroRepository.findById(id);
+
+        return Optional.ofNullable(miembroRepository.findById(id).orElseThrow(() -> new RuntimeException("Miembro no encontrado")));
     }
 
     public Miembro guardar(Miembro miembro) {

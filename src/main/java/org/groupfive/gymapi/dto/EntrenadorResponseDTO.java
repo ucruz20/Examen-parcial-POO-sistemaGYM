@@ -8,6 +8,5 @@ public class EntrenadorResponseDTO {
     private Long id;
     private String nombre;
     private String especialidad;
-    private String horario;
     private BigDecimal salario;
 }

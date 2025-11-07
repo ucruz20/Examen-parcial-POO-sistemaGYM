@@ -1,7 +1,9 @@
 package org.groupfive.gymapi.controller;
 
 import java.util.List;
+import java.util.Map;
 
+import jakarta.validation.Valid;
 import org.groupfive.gymapi.dto.ClaseResponse;
 import org.groupfive.gymapi.dto.ClaseRequest;
 import org.groupfive.gymapi.service.ClaseService;
@@ -25,29 +27,26 @@ public class ClaseController {
 
     @GetMapping
     public ResponseEntity<List<ClaseResponse>> verClases() {
-        List<ClaseResponse> clases = claseService.obtenerClases();
+        List<ClaseResponse> clases = claseService.getClasses();
         return ResponseEntity.ok(clases);
     }
 
     @PostMapping("/crear")
-    public ResponseEntity<ClaseResponse> crearClase(@RequestBody ClaseRequest ClaseRequest) {
-        ClaseResponse nuevaClaseResponse = claseService.crearClase(ClaseRequest);
+    public ResponseEntity<ClaseResponse> createClase(@Valid @RequestBody ClaseRequest ClaseRequest) {
+        ClaseResponse nuevaClaseResponse = claseService.createClass(ClaseRequest);
         return ResponseEntity.ok(nuevaClaseResponse);
     }
 
-    @PutMapping("/{idClase}/editar")
-    public ResponseEntity<ClaseResponse> editarInfo(@PathVariable Long idClase, @RequestBody ClaseRequest clase) {
-        ClaseResponse claseEditada = claseService.editarInfo(idClase, clase);
-        return (claseEditada != null) ?
-            ResponseEntity.ok(claseEditada) :
-            ResponseEntity.notFound().build();
+    @PutMapping("/{idClase}")
+    public ResponseEntity<ClaseResponse> updateClase(@PathVariable Long idClase,@Valid @RequestBody ClaseRequest request) {
+        ClaseResponse actualizada = claseService.editorInfo(idClase, request);
+         return   ResponseEntity.ok(actualizada);
     }
 
     @DeleteMapping("/{idClase}")
     public ResponseEntity<String> eliminar(@PathVariable Long idClase) {
-        boolean respuesta = claseService.eliminar(idClase);
-        return respuesta ?
-            ResponseEntity.ok("Clase eliminada con exito") :
-            ResponseEntity.notFound().build();
+         claseService.eliminate(idClase);
+         return
+            ResponseEntity.ok(Map.of("message", "Clase eliminada con exito", "idEliminado", idClase).toString());
     }
 }

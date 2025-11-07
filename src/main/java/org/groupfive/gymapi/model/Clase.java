@@ -3,6 +3,7 @@ package org.groupfive.gymapi.model;
 import jakarta.persistence.*;
 import lombok.Data;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -21,12 +22,12 @@ public class Clase {
     private int cupoMaximo;
 
     @Column(name = "horario", nullable = false)
-    private LocalDateTime horario;
+    private String horario;
     
     @ManyToOne(optional = false)
-    @Column(name = "id_entrenador")
-    private Long entrenadorId;
+    @JoinColumn(name = "entrenador_id")
+    private Entrenador entrenador;
 
-    @OneToMany(mappedBy = "clase", cascade = CascadeType.ALL)
-    private List<Inscripcion> inscritos;
+    @OneToMany(mappedBy = "clase", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Inscripcion> inscritos = new ArrayList<>();
 }
