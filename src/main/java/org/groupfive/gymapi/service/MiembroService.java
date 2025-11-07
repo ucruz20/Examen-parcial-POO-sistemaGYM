@@ -18,7 +18,8 @@ public class MiembroService {
     }
 
     public Optional<Miembro> obtenerPorId(Long id) {
-        return miembroRepository.findById(id);
+
+        return Optional.ofNullable(miembroRepository.findById(id).orElseThrow(() -> new RuntimeException("Miembro no encontrado")));
     }
 
     public Miembro guardar(Miembro miembro) {

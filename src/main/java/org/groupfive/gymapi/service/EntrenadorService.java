@@ -39,28 +39,5 @@ public class EntrenadorService {
         return claseRepository.save(clase);
     }
 
-    @Transactional
-    public void registrarAsistencia(Long claseId, Long miembroId) {
 
-        Miembro miembro = miembroRepository.findById(miembroId)
-                .orElseThrow(() -> new RuntimeException("Miembro no encontrado."));
-
-        Clase clase = claseRepository.findById(claseId)
-                .orElseThrow(() -> new RuntimeException("Clase no encontrada."));
-
-
-        LocalDateTime startOfDay = LocalDate.now().atStartOfDay();
-        LocalDateTime endOfDay = LocalDate.now().atTime(23, 59, 59);
-        if (asistenciaRepository.existsByMiembro_IdAndSesion_IdSesionAndFechaHoraBetween(
-                miembroId, claseId, startOfDay, endOfDay)) {
-            throw new RuntimeException("Error: La asistencia del miembro ya fue registrada para esta clase hoy.");
-        }
-
-        Asistencia asistencia = new Asistencia();
-        asistencia.setMiembro(miembro);
-        asistencia.setClase(clase);
-        asistencia.setPresente(true);
-
-        asistenciaRepository.save(asistencia);
-    }
 }

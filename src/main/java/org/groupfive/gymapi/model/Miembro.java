@@ -1,6 +1,9 @@
 package org.groupfive.gymapi.model;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
+
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -29,5 +32,6 @@ public class Miembro {
     private String tipoMembresia;
 
     @OneToMany(mappedBy = "miembro", cascade = CascadeType.ALL)
-    private List<Inscripcion> inscripciones;
+    @JsonIgnore
+    private List<Inscripcion> inscripciones = new ArrayList<>();
 }
