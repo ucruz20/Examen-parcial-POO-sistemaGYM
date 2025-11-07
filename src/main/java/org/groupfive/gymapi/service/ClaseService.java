@@ -46,20 +46,18 @@ public class ClaseService {
     }
 
     public ClaseResponse editorInfo(Long idClass, ClaseRequest classRequest) {
-        Clase classActual = claseRepository.findById(idClass)
-                .orElseThrow(()-> new RuntimeException("Clase no encontrado"));
+        return claseRepository.findById(idClass).map(c->{
+                    Entrenador newTrainer = entrenadorRepository.findById(classRequest.getEntrenadorId())
+                            .orElseThrow(()-> new RuntimeException("Entrenador no encontrado"));
+            c.setNombre(classRequest.getNombre());
+            c.setHorario(classRequest.getHorario());
+            c.setCupoMaximo(classRequest.getCupoMaximo());
+            c.setEntrenador(newTrainer);
+                    claseRepository.save(c);
+                    return toResponse(c);
 
-
-
-            Entrenador trainerActual = entrenadorRepository.findById(classActual.getEntrenador().getId())
-                    .orElseThrow(()-> new RuntimeException("Entrenador no encontrado"));
-
-                Clase c = new Clase();
-                c.setNombre(classRequest.getNombre());
-                c.setHorario(classRequest.getHorario());
-                c.setCupoMaximo(classRequest.getCupoMaximo());
-                c.setEntrenador(trainerActual);
-                return toResponse(classActual);
+                }).
+                orElseThrow(()-> new RuntimeException("Clase no encontrado"));
 
     }
 

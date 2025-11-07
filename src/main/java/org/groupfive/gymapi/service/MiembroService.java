@@ -1,6 +1,7 @@
 package org.groupfive.gymapi.service;
 
 import lombok.RequiredArgsConstructor;
+import org.groupfive.gymapi.dto.MiembroRequestDto;
 import org.groupfive.gymapi.model.Miembro;
 import org.groupfive.gymapi.Repository.MiembroRepository;
 import org.springframework.stereotype.Service;
@@ -26,7 +27,7 @@ public class MiembroService {
         return miembroRepository.save(miembro);
     }
 
-    public Miembro actualizar(Long id, Miembro datos) {
+    public Miembro actualizar(Long id, MiembroRequestDto datos) {
         return miembroRepository.findById(id)
                 .map(m -> {
                     m.setNombre(datos.getNombre());

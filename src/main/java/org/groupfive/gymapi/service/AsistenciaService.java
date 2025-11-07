@@ -59,9 +59,7 @@ public class AsistenciaService {
 
     @Transactional(readOnly = true)
     public List<AsistenciaResponseDTO> obtenerTodasLasAsistencias() {
-        return asistenciaRepository.findAll().stream()
-                .map(this::mapToDTO)
-                .collect(Collectors.toList());
+        return asistenciaRepository.findAll().stream().map(this::mapToDTO).collect(Collectors.toList());
     }
 
     private AsistenciaResponseDTO mapToDTO(Asistencia asistencia) {

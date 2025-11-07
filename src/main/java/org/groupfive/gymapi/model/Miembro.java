@@ -27,8 +27,9 @@ public class Miembro {
     @Column(nullable = false)
     private String telefono;
 
+    @Column(length = 500)
     private String direccion;
-
+    @Column(nullable = false)
     private String tipoMembresia;
 
     @OneToMany(mappedBy = "miembro", cascade = CascadeType.ALL)

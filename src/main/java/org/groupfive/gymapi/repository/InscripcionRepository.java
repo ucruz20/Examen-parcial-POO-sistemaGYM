@@ -6,8 +6,8 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface InscripcionRepository extends JpaRepository<Inscripcion, Long> {
-    boolean existsByMiembro_IdAndClase_Id(Long idMiembro, Long idClase);
-    long countByClase_Id(Long idClase);
+    boolean existsByMiembro_IdAndClase_Id(Long miembroId, Long claseId);
+    long countByClase_Id(Long claseId);
 }
 
 

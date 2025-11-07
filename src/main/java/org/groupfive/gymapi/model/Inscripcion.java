@@ -1,5 +1,6 @@
 package org.groupfive.gymapi.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 import java.time.LocalDate;
@@ -19,9 +20,11 @@ public class Inscripcion {
 
     @ManyToOne
     @JoinColumn(name = "miembro_id")
+    @JsonIgnore
     private Miembro miembro;
 
     @ManyToOne
     @JoinColumn(name = "clase_id")
+    @JsonIgnore
     private Clase clase;
 }
