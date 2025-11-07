@@ -25,7 +25,7 @@ public class Clase {
     
     @ManyToOne(optional = false)
     @Column(name = "id_entrenador")
-    private Long entrenadorId;
+    private Entrenador entrenador;
 
     @OneToMany(mappedBy = "clase", cascade = CascadeType.ALL)
     private List<Inscripcion> inscritos;

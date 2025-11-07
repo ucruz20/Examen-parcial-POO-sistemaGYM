@@ -3,7 +3,7 @@ package org.groupfive.gymapi.service;
 import lombok.RequiredArgsConstructor;
 import org.groupfive.gymapi.dto.AsistenciaResponseDTO;
 import org.groupfive.gymapi.model.Asistencia;
-import org.groupfive.gymapi.repository.AsistenciaRepository;
+import org.groupfive.gymapi.Repository.AsistenciaRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
