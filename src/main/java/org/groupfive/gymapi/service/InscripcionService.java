@@ -2,7 +2,7 @@ package org.groupfive.gymapi.service;
 
 import lombok.RequiredArgsConstructor;
 import org.groupfive.gymapi.model.Inscripcion;
-import org.groupfive.gymapi.repository.InscripcionRepository;
+import org.groupfive.gymapi.Repository.InscripcionRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

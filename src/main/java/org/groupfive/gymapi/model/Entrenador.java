@@ -12,10 +12,19 @@ import java.math.BigDecimal;
 public class Entrenador {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id_entrenador")
     private Long id;
+
+    @Column(nullable = false)
     private String nombre;
+
+    @Column(nullable = false)
     private String especialidad;
+
+    @Column(nullable = false)
     private String horario;
+
+    @Column(nullable = false)
     private BigDecimal salario;
     @OneToMany(mappedBy = "entrenador", cascade = CascadeType.ALL, orphanRemoval = true)
     private java.util.List<Clase> clases;

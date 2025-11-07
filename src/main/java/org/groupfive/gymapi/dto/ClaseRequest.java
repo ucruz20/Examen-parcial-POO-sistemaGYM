@@ -16,10 +16,10 @@ public class ClaseRequest {
 
     @NotNull
     @Min(1)
-    private int cupoMaximo;
+    private Integer cupoMaximo;
 
     @NotBlank
-    private LocalDateTime horario;
+    private String horario;
 
     @NotNull
     private Long entrenadorId;

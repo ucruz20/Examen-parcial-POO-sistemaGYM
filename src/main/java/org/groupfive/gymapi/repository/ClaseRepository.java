@@ -1,4 +1,4 @@
-package org.groupfive.gymapi.repository;
+package org.groupfive.gymapi.Repository;
 
 import org.groupfive.gymapi.model.Clase;
 import org.springframework.data.jpa.repository.JpaRepository;

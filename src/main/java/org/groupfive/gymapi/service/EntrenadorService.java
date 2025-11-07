@@ -7,7 +7,7 @@ import org.groupfive.gymapi.model.Asistencia;
 import org.groupfive.gymapi.model.Clase;
 import org.groupfive.gymapi.model.Entrenador;
 import org.groupfive.gymapi.model.Miembro;
-import org.groupfive.gymapi.repository.*;
+import org.groupfive.gymapi.Repository.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,7 +34,7 @@ public class EntrenadorService {
         clase.setNombre(req.getNombre());
         clase.setHorario(req.getHorario());
         clase.setCupoMaximo(req.getCupoMaximo());
-        clase.setEntrenadorId(entrenador.getId());
+        clase.setEntrenador(entrenador);
 
         return claseRepository.save(clase);
     }
