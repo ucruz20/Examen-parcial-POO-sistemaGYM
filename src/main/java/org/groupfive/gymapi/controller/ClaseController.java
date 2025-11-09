@@ -1,9 +1,11 @@
 package org.groupfive.gymapi.controller;
 
 import java.util.List;
+import java.util.Map;
 
-import org.groupfive.gymapi.dto.ClaseDTO;
-import org.groupfive.gymapi.dto.CrearClaseDTO;
+import jakarta.validation.Valid;
+import org.groupfive.gymapi.dto.ClaseResponse;
+import org.groupfive.gymapi.dto.ClaseRequest;
 import org.groupfive.gymapi.service.ClaseService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -24,38 +26,27 @@ public class ClaseController {
     private final ClaseService claseService;
 
     @GetMapping
-    public ResponseEntity<List<ClaseDTO>> verClases() {
-        List<ClaseDTO> clases = claseService.obtenerClases();
+    public ResponseEntity<List<ClaseResponse>> verClases() {
+        List<ClaseResponse> clases = claseService.getClasses();
         return ResponseEntity.ok(clases);
     }
 
     @PostMapping("/crear")
-    public ResponseEntity<ClaseDTO> crearClase(@RequestBody CrearClaseDTO crearClaseDTO) {
-        ClaseDTO nuevaClaseDTO = claseService.crearClase(crearClaseDTO);
-        return ResponseEntity.ok(nuevaClaseDTO);
+    public ResponseEntity<ClaseResponse> createClase(@Valid @RequestBody ClaseRequest ClaseRequest) {
+        ClaseResponse nuevaClaseResponse = claseService.createClass(ClaseRequest);
+        return ResponseEntity.ok(nuevaClaseResponse);
     }
 
-    @PostMapping("/{idClase}/inscribir/{idMiembro}")
-    public ResponseEntity<String> inscribirMiembro(@PathVariable Long idClase, @PathVariable Long idMiembro) {
-        boolean resultado = claseService.inscribirMiembro(idClase, idMiembro);
-        return resultado ?
-            ResponseEntity.ok("Miembro inscrito con exito") :
-            ResponseEntity.status(409).body("Cupo lleno o ya inscrito");
-    }
-
-    @PutMapping("/{idClase}/editar")
-    public ResponseEntity<ClaseDTO> editarInfo(@PathVariable Long idClase, @RequestBody CrearClaseDTO clase) {
-        ClaseDTO claseEditada = claseService.editarInfo(idClase, clase);
-        return (claseEditada != null) ?
-            ResponseEntity.ok(claseEditada) :
-            ResponseEntity.notFound().build();
+    @PutMapping("/{idClase}")
+    public ResponseEntity<ClaseResponse> updateClase(@PathVariable Long idClase,@Valid @RequestBody ClaseRequest request) {
+        ClaseResponse actualizada = claseService.editorInfo(idClase, request);
+         return   ResponseEntity.ok(actualizada);
     }
 
     @DeleteMapping("/{idClase}")
     public ResponseEntity<String> eliminar(@PathVariable Long idClase) {
-        boolean respuesta = claseService.eliminar(idClase);
-        return respuesta ?
-            ResponseEntity.ok("Clase eliminada con exito") :
-            ResponseEntity.notFound().build();
+         claseService.eliminate(idClase);
+         return
+            ResponseEntity.ok(Map.of("message", "Clase eliminada con exito", "idEliminado", idClase).toString());
     }
 }

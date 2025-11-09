@@ -7,10 +7,8 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ClaseDTO {
+public class EntrenadorResumen{
     private Long id;
     private String nombre;
-    private int cupoMaximo;
-    private String horario;
-    private String entrenador; // TODO: usar modelo Entrenador
+    private String especialidad;
 }
