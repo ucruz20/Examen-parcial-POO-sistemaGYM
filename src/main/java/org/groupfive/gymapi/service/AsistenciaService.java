@@ -2,11 +2,15 @@ package org.groupfive.gymapi.service;
 
 import lombok.RequiredArgsConstructor;
 import org.groupfive.gymapi.Repository.ClaseRepository;
+import org.groupfive.gymapi.Repository.InscripcionRepository;
 import org.groupfive.gymapi.Repository.MiembroRepository;
 import org.groupfive.gymapi.dto.AsistenciaResponseDTO;
+import org.groupfive.gymapi.exception.BadRequestException;
+import org.groupfive.gymapi.exception.NotFoundException;
 import org.groupfive.gymapi.model.Asistencia;
 import org.groupfive.gymapi.Repository.AsistenciaRepository;
 import org.groupfive.gymapi.model.Clase;
+import org.groupfive.gymapi.model.Inscripcion;
 import org.groupfive.gymapi.model.Miembro;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,22 +27,26 @@ public class AsistenciaService {
     private final AsistenciaRepository asistenciaRepository;
     private final MiembroRepository miembroRepository;
     private final ClaseRepository claseRepository;
+    private final InscripcionRepository inscripcionRepository;
 
     @Transactional
     public void registrarAsistencia(Long claseId, Long miembroId) {
 
         Miembro miembro = miembroRepository.findById(miembroId)
-                .orElseThrow(() -> new RuntimeException("Miembro no encontrado."));
+                .orElseThrow(() -> new NotFoundException("Miembro no encontrado."));
 
         Clase clase = claseRepository.findById(claseId)
-                .orElseThrow(() -> new RuntimeException("Clase no encontrada."));
+                .orElseThrow(() -> new NotFoundException("Clase no encontrada."));
 
+        if(!inscripcionRepository.existsByMiembro_IdAndClase_Id(miembroId, claseId)){
+            throw new BadRequestException("Error: El miembro no esta inscrito en la clase");
+        };
 
         LocalDateTime startOfDay = LocalDate.now().atStartOfDay();
         LocalDateTime endOfDay = LocalDate.now().atTime(23, 59, 59);
         if (asistenciaRepository.existsByMiembro_IdAndClase_IdAndFechaHoraBetween(
                 miembroId, claseId, startOfDay, endOfDay)) {
-            throw new RuntimeException("Error: La asistencia del miembro ya fue registrada para esta clase hoy.");
+            throw new BadRequestException("Error: La asistencia del miembro ya fue registrada para esta clase hoy.");
         }
 
         Asistencia asistencia = new Asistencia();
@@ -53,7 +61,7 @@ public class AsistenciaService {
     @Transactional(readOnly = true)
     public AsistenciaResponseDTO obtenerAsistenciaPorId(Long id) {
         Asistencia asistencia = asistenciaRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Registro de asistencia no encontrado."));
+                .orElseThrow(() -> new NotFoundException("Registro de asistencia no encontrado."));
         return mapToDTO(asistencia);
     }
 

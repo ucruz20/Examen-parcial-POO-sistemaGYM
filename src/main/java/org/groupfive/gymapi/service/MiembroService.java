@@ -2,6 +2,7 @@ package org.groupfive.gymapi.service;
 
 import lombok.RequiredArgsConstructor;
 import org.groupfive.gymapi.dto.MiembroRequestDto;
+import org.groupfive.gymapi.exception.NotFoundException;
 import org.groupfive.gymapi.model.Miembro;
 import org.groupfive.gymapi.Repository.MiembroRepository;
 import org.springframework.stereotype.Service;
@@ -37,7 +38,7 @@ public class MiembroService {
                     m.setDireccion(datos.getDireccion());
                     m.setTipoMembresia(datos.getTipoMembresia());
                     return miembroRepository.save(m);
-                }).orElseThrow(() -> new RuntimeException("Miembro no encontrado"));
+                }).orElseThrow(() -> new NotFoundException("Miembro no encontrado"));
     }
 
     public void eliminar(Long id) {
