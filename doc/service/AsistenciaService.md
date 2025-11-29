@@ -1,8 +1,3 @@
-## 2\. `AsistenciaService.md`
-
-Este archivo contendrá la documentación detallada del `AsistenciaService`.
-
-```markdown
 # Documentación del Servicio: `AsistenciaService`
 
 ## Descripción General
