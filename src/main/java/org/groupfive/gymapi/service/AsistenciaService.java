@@ -2,11 +2,13 @@ package org.groupfive.gymapi.service;
 
 import lombok.RequiredArgsConstructor;
 import org.groupfive.gymapi.Repository.ClaseRepository;
+import org.groupfive.gymapi.Repository.InscripcionRepository;
 import org.groupfive.gymapi.Repository.MiembroRepository;
 import org.groupfive.gymapi.dto.AsistenciaResponseDTO;
 import org.groupfive.gymapi.model.Asistencia;
 import org.groupfive.gymapi.Repository.AsistenciaRepository;
 import org.groupfive.gymapi.model.Clase;
+import org.groupfive.gymapi.model.Inscripcion;
 import org.groupfive.gymapi.model.Miembro;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,6 +25,7 @@ public class AsistenciaService {
     private final AsistenciaRepository asistenciaRepository;
     private final MiembroRepository miembroRepository;
     private final ClaseRepository claseRepository;
+    private final InscripcionRepository inscripcionRepository;
 
     @Transactional
     public void registrarAsistencia(Long claseId, Long miembroId) {
@@ -33,6 +36,9 @@ public class AsistenciaService {
         Clase clase = claseRepository.findById(claseId)
                 .orElseThrow(() -> new RuntimeException("Clase no encontrada."));
 
+        if(!inscripcionRepository.existsByMiembro_IdAndClase_Id(miembroId, claseId)){
+            throw new RuntimeException("Error: El miembro no esta inscrito en la clase");
+        };
 
         LocalDateTime startOfDay = LocalDate.now().atStartOfDay();
         LocalDateTime endOfDay = LocalDate.now().atTime(23, 59, 59);
