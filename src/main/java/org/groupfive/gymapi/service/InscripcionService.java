@@ -1,6 +1,8 @@
 package org.groupfive.gymapi.service;
 
 import lombok.RequiredArgsConstructor;
+import org.groupfive.gymapi.exception.BadRequestException;
+import org.groupfive.gymapi.exception.NotFoundException;
 import org.groupfive.gymapi.model.*;
 import org.groupfive.gymapi.Repository.*;
 import org.springframework.stereotype.Service;
@@ -29,19 +31,19 @@ public class InscripcionService {
     @Transactional
     public Inscripcion guardar(Long miembroId, Long claseId) {
         Miembro miembro = miembroRepository.findById(miembroId)
-                .orElseThrow(() -> new RuntimeException("Miembro no encontrado"));
+                .orElseThrow(() -> new NotFoundException("Miembro no encontrado"));
 
         Clase clase = claseRepository.findById(claseId)
-                .orElseThrow(() -> new RuntimeException("Clase no encontrada"));
+                .orElseThrow(() -> new NotFoundException("Clase no encontrada"));
 
         boolean yaInscrito = inscripcionRepository.existsByMiembro_IdAndClase_Id(miembroId, claseId);
         if (yaInscrito) {
-            throw new RuntimeException("El miembro ya está inscrito en esta clase");
+            throw new BadRequestException("El miembro ya está inscrito en esta clase");
         }
 
         long inscritos = inscripcionRepository.countByClase_Id(claseId);
         if (inscritos >= clase.getCupoMaximo()) {
-            throw new RuntimeException("La clase ya alcanzó su cupo máximo");
+            throw new BadRequestException("La clase ya alcanzó su cupo máximo");
         }
 
         Inscripcion inscripcion = new Inscripcion();

@@ -3,10 +3,12 @@ package org.groupfive.gymapi.service;
 import lombok.RequiredArgsConstructor;
 
 import org.groupfive.gymapi.dto.ClaseRequest;
-import org.groupfive.gymapi.model.Asistencia;
+import org.groupfive.gymapi.exception.BadRequestException;
+import org.groupfive.gymapi.exception.NotFoundException;
+
 import org.groupfive.gymapi.model.Clase;
 import org.groupfive.gymapi.model.Entrenador;
-import org.groupfive.gymapi.model.Miembro;
+
 import org.groupfive.gymapi.Repository.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,7 +30,7 @@ public class EntrenadorService {
     public Clase crearClase(ClaseRequest req) {
 
         Entrenador entrenador = entrenadorRepository.findById(req.getEntrenadorId())
-                .orElseThrow(() -> new RuntimeException("Error: Entrenador no encontrado para asignar la clase."));
+                .orElseThrow(() -> new BadRequestException("Error: Entrenador no encontrado para asignar la clase."));
 
         Clase clase = new Clase();
         clase.setNombre(req.getNombre());
