@@ -1,452 +1,515 @@
-// -------------------- MIEMBROS --------------------
+# Documentación API – Administración del Gimnasio
 
-➤ Crear Miembro
+## MIEMBROS
 
-POST /miembros
+### Crear Miembro
 
-Descripción
+**POST** `/api/admin/miembros`
+
+**Descripción**
 
 Crea un nuevo miembro en el sistema.
 Recibe los datos del miembro desde el cuerpo de la solicitud y devuelve el miembro creado.
 
-Request Body
+#### Request Body
+
+```json
 {
   "nombre": "Juan Pérez",
+  "apellido": "Ramírez",
   "correo": "juan.perez@mail.com",
-  "edad": 25,
-  "telefono": "7890-1234"
+  "telefono": "7890-1234",
+  "direccion": "San Salvador, Col. Escalón",
+  "tipoMembresia": "BASIC"
 }
+```
 
+#### Respuesta (200 OK)
 
-
- Respuesta (200 OK)
+```json
 {
   "id": 10,
   "nombre": "Juan Pérez",
+  "apellido": "Ramírez",
   "correo": "juan.perez@mail.com",
-  "edad": 25,
-  "telefono": "7890-1234"
+  "telefono": "7890-1234",
+  "direccion": "San Salvador, Col. Escalón",
+  "tipoMembresia": "BASIC"
 }
+```
 
- Ejemplo (curl)
-curl -X POST http://localhost:8080/miembros \
+#### Ejemplo (curl)
+
+```bash
+curl -X POST http://localhost:8080/api/admin/miembros \
   -H "Content-Type: application/json" \
   -d '{
         "nombre": "Juan Pérez",
+        "apellido": "Ramírez",
         "correo": "juan.perez@mail.com",
-        "edad": 25,
-        "telefono": "7890-1234"
+        "telefono": "7890-1234",
+        "direccion": "San Salvador, Col. Escalón",
+        "tipoMembresia": "BASIC"
       }'
+```
 
-Errores
+#### Errores
 
-400 Bad Request — Falta un campo obligatorio o el JSON es inválido
+* `400 Bad Request` — Falta un campo obligatorio o el JSON es inválido.
+* `500 Internal Server Error` — Error inesperado al intentar crear el miembro.
 
-500 Internal Server Error — Error inesperado al intentar crear el miembro
+---
 
-</details>
+### Editar Miembro
 
+**PUT** `/api/admin/miembros/{id}`
 
-➤ Editar Miembro
-
-PUT /miembros/{id}
-
-Descripción
+**Descripción**
 
 Actualiza los datos de un miembro existente en el sistema.
 Se debe enviar el identificador del miembro en la URL y la información a modificar en el cuerpo de la solicitud.
 
-Request Body
+#### Request Body
 
+```json
 {
   "nombre": "Juan Pérez",
-  "correo": "juan.perez@mail.com",
-  "edad": 26,
-  "telefono": "7890-5678"
+  "apellido": "Ramírez",
+  "correo": "juan.perez.editado@mail.com",
+  "telefono": "7890-5678",
+  "direccion": "Santa Tecla, La Libertad",
+  "tipoMembresia": "VIP"
 }
+```
 
+#### Respuesta (200 OK)
 
-Respuesta (200 OK)
+```json
 {
   "id": 10,
   "nombre": "Juan Pérez",
-  "correo": "juan.perez@mail.com",
-  "edad": 26,
-  "telefono": "7890-5678"
+  "apellido": "Ramírez",
+  "correo": "juan.perez.editado@mail.com",
+  "telefono": "7890-5678",
+  "direccion": "Santa Tecla, La Libertad",
+  "tipoMembresia": "VIP"
 }
+```
 
-Ejemplo (curl)
-curl -X PUT http://localhost:8080/miembros/10 \
+#### Ejemplo (curl)
+
+```bash
+curl -X PUT http://localhost:8080/api/admin/miembros/10 \
   -H "Content-Type: application/json" \
   -d '{
         "nombre": "Juan Pérez",
-        "correo": "juan.perez@mail.com",
-        "edad": 26,
-        "telefono": "7890-5678"
+        "apellido": "Ramírez",
+        "correo": "juan.perez.editado@mail.com",
+        "telefono": "7890-5678",
+        "direccion": "Santa Tecla, La Libertad",
+        "tipoMembresia": "VIP"
       }'
+```
 
-Errores
+#### Errores
 
-400 Bad Request – Datos inválidos o falta un campo obligatorio
-404 Not Found – El miembro con el ID especificado no existe
-500 Internal Server Error
+* `400 Bad Request` – Datos inválidos o falta un campo obligatorio.
+* `404 Not Found` – El miembro con el ID especificado no existe.
+* `500 Internal Server Error` – Error inesperado en el servidor.
 
-</details>
+---
 
-➤ Listar Miembros
+### Listar Miembros
 
-GET /miembros
+**GET** `/api/admin/miembros`
 
-Descripción
+**Descripción**
 
 Obtiene la lista completa de miembros registrados en el sistema.
 No requiere parámetros ni cuerpo en la solicitud.
 
-Respuesta (200 OK)
+#### Respuesta (200 OK)
 
+```json
 [
   {
     "id": 1,
     "nombre": "Juan Pérez",
+    "apellido": "Ramírez",
     "correo": "juan.perez@mail.com",
-    "edad": 25,
-    "telefono": "7890-1234"
+    "telefono": "7890-1234",
+    "direccion": "San Salvador, Col. Escalón",
+    "tipoMembresia": "BASIC"
   },
   {
     "id": 2,
     "nombre": "María Gómez",
+    "apellido": "López",
     "correo": "maria.gomez@mail.com",
-    "edad": 30,
-    "telefono": "7654-9876"
+    "telefono": "7654-9876",
+    "direccion": "Santa Tecla, La Libertad",
+    "tipoMembresia": "VIP"
   }
 ]
+```
 
-Ejemplo (curl)
-curl -X GET http://localhost:8080/miembros
+#### Ejemplo (curl)
 
-Errores
+```bash
+curl -X GET http://localhost:8080/api/admin/miembros
+```
 
-500 Internal Server Error
+#### Errores
 
-</details>
+* `500 Internal Server Error` – Error inesperado en el servidor.
 
-➤ Eliminar Miembro
+---
 
-DELETE /miembros/{id}
+### Eliminar Miembro
 
-Descripción
+**DELETE** `/api/admin/miembros/{id}`
+
+**Descripción**
 
 Elimina un miembro existente del sistema usando su identificador.
 No requiere cuerpo en la solicitud, únicamente el parámetro de la ruta.
 
-Respuesta (200 OK)
+#### Respuesta (200 OK)
+
+```json
 {
   "message": "Miembro eliminado correctamente"
 }
+```
 
-Ejemplo (curl)
-curl -X DELETE http://localhost:8080/miembros/10
+#### Ejemplo (curl)
 
-Errores
+```bash
+curl -X DELETE http://localhost:8080/api/admin/miembros/10
+```
 
-404 Not Found – El miembro con el ID especificado no existe
-500 Internal Server Error
+#### Errores
 
-</details>
+* `404 Not Found` – El miembro con el ID especificado no existe.
+* `500 Internal Server Error` – Error inesperado en el servidor.
 
-// -------------------- ENTRENADORES --------------------
+---
 
-➤ Crear Entrenador
+## ENTRENADORES
 
-POST /entrenadores
+### Crear Entrenador
 
-Descripción
+**POST** `/api/admin/entrenadores`
+
+**Descripción**
 
 Crea un nuevo entrenador en el sistema.
 Recibe los datos del entrenador mediante el cuerpo de la solicitud y devuelve el entrenador creado.
 
-Request Body
+#### Request Body
+
+```json
 {
   "nombre": "Carlos Ruiz",
-  "especialidad": "Yoga",
-  "telefono": "7890-4567",
-  "correo": "carlos.ruiz@mail.com"
+  "especialidad": "Entrenamiento funcional",
+  "horario": "Lunes a Viernes 5:30 - 11:30 AM",
+  "salario": 850.0
 }
+```
 
+#### Respuesta (200 OK)
 
-Respuesta (200 OK)
+```json
 {
   "id": 5,
   "nombre": "Carlos Ruiz",
-  "especialidad": "Yoga",
-  "telefono": "7890-4567",
-  "correo": "carlos.ruiz@mail.com"
+  "especialidad": "Entrenamiento funcional",
+  "horario": "Lunes a Viernes 5:30 - 11:30 AM",
+  "salario": 850.0
 }
+```
 
-Ejemplo (curl)
-curl -X POST http://localhost:8080/entrenadores \
+#### Ejemplo (curl)
+
+```bash
+curl -X POST http://localhost:8080/api/admin/entrenadores \
   -H "Content-Type: application/json" \
   -d '{
         "nombre": "Carlos Ruiz",
-        "especialidad": "Yoga",
-        "telefono": "7890-4567",
-        "correo": "carlos.ruiz@mail.com"
+        "especialidad": "Entrenamiento funcional",
+        "horario": "Lunes a Viernes 5:30 - 11:30 AM",
+        "salario": 850.0
       }'
+```
 
-Errores
+#### Errores
 
-400 Bad Request – Falta un campo obligatorio o el JSON es inválido
-500 Internal Server Error
+* `400 Bad Request` – Falta un campo obligatorio o el JSON es inválido.
+* `500 Internal Server Error` – Error inesperado en el servidor.
 
-</details>
+---
 
-@PutMapping("/entrenadores/{id}")
-    public ResponseEntity<Entrenador> editarEntrenador(@PathVariable Long id, @RequestBody EntrenadorRequestDTO dto) {
-        return ResponseEntity.ok(adminService.actualizarEntrenador(id, dto));
-    }
+### Editar Entrenador
 
-➤ Editar Entrenador
+**PUT** `/api/admin/entrenadores/{id}`
 
-PUT /entrenadores/{id}
-
-Descripción
+**Descripción**
 
 Actualiza los datos de un entrenador existente en el sistema.
 El identificador del entrenador se envía en la URL y los datos a modificar se envían en el cuerpo de la solicitud.
 
+#### Request Body
 
-Request Body
-
+```json
 {
   "nombre": "Carlos Ruiz",
-  "especialidad": "Yoga Avanzado",
-  "telefono": "7890-9999",
-  "correo": "carlos.ruiz@mail.com"
+  "especialidad": "Entrenamiento funcional",
+  "salario": 900.0
 }
+```
 
-Respuesta (200 OK)
+#### Respuesta (200 OK)
+
+```json
 {
   "id": 5,
   "nombre": "Carlos Ruiz",
-  "especialidad": "Yoga Avanzado",
-  "telefono": "7890-9999",
-  "correo": "carlos.ruiz@mail.com"
+  "especialidad": "Entrenamiento funcional",
+  "salario": 900.0
 }
+```
 
-Ejemplo (curl)
-curl -X PUT http://localhost:8080/entrenadores/5 \
+#### Ejemplo (curl)
+
+```bash
+curl -X PUT http://localhost:8080/api/admin/entrenadores/5 \
   -H "Content-Type: application/json" \
   -d '{
         "nombre": "Carlos Ruiz",
-        "especialidad": "Yoga Avanzado",
-        "telefono": "7890-9999",
-        "correo": "carlos.ruiz@mail.com"
+        "especialidad": "Entrenamiento funcional",
+        "salario": 900.0
       }'
+```
 
-Errores
+#### Errores
 
-400 Bad Request – Los datos enviados son inválidos o incompletos
-404 Not Found – El entrenador con el ID especificado no existe
-500 Internal Server Error
+* `400 Bad Request` – Los datos enviados son inválidos o incompletos.
+* `404 Not Found` – El entrenador con el ID especificado no existe.
+* `500 Internal Server Error` – Error inesperado en el servidor.
 
-</details>
+---
 
-➤ Listar Entrenadores
+### Listar Entrenadores
 
-GET /entrenadores
+**GET** `/api/admin/entrenadores`
 
-Descripción
+**Descripción**
 
 Obtiene la lista completa de entrenadores registrados en el sistema.
 No requiere parámetros ni cuerpo en la solicitud.
 
-Respuesta (200 OK)
+#### Respuesta (200 OK)
 
+```json
 [
   {
     "id": 1,
     "nombre": "Carlos Ruiz",
-    "especialidad": "Yoga",
-    "telefono": "7890-4567",
-    "correo": "carlos.ruiz@mail.com"
+    "especialidad": "Entrenamiento funcional",
+    "salario": 850.0
   },
   {
     "id": 2,
-    "nombre": "María López",
-    "especialidad": "Crossfit",
-    "telefono": "7854-9876",
-    "correo": "maria.lopez@mail.com"
+    "nombre": "Laura M. Morales",
+    "especialidad": "Entrenamiento funcional",
+    "salario": 900.0
   }
 ]
+```
 
-Ejemplo (curl)
-curl -X GET http://localhost:8080/entrenadores
+#### Ejemplo (curl)
 
-Errores
+```bash
+curl -X GET http://localhost:8080/api/admin/entrenadores
+```
 
-500 Internal Server Error
+#### Errores
 
-</details>
+* `500 Internal Server Error` – Error inesperado en el servidor.
 
-➤ Eliminar Entrenador
+---
 
-DELETE /entrenadores/{id}
+### Eliminar Entrenador
 
-Descripción
+**DELETE** `/api/admin/entrenadores/{id}`
+
+**Descripción**
 
 Elimina un entrenador existente del sistema utilizando su identificador único.
 No requiere cuerpo en la solicitud.
 
+#### Respuesta (200 OK)
 
-Respuesta (200 OK)
+```json
 {
   "message": "Entrenador eliminado correctamente"
 }
+```
 
-Ejemplo (curl)
-curl -X DELETE http://localhost:8080/entrenadores/5
+#### Ejemplo (curl)
 
-Errores
+```bash
+curl -X DELETE http://localhost:8080/api/admin/entrenadores/5
+```
 
-404 Not Found – El entrenador con el ID especificado no existe
-500 Internal Server Error
+#### Errores
 
-</details>
+* `404 Not Found` – El entrenador con el ID especificado no existe.
+* `500 Internal Server Error` – Error inesperado en el servidor.
 
-// -------------------- CLASES --------------------
+---
 
-➤ Crear Clase
+## CLASES
 
-POST /api/admin/clases
+### Crear Clase
 
-Ver detalles
-Descripción
+**POST** `/api/admin/clases`
+
+**Descripción**
 
 Crea una nueva clase en el sistema y la asigna a un entrenador existente.
 
-Request Body
-{
-  "nombre": "Yoga Avanzado",
-  "descripcion": "Clase enfocada en flexibilidad y respiración",
-  "cupoMaximo": 20,
-  "entrenadorId": 3,
-  "horario": "Lunes 7:00 AM"
-}
+#### Request Body
 
-Respuesta (200 OK)
+```json
+{
+  "nombre": "Aerobicos Avanzado",
+  "cupoMaximo": 3,
+  "horario": "Lunes y Viernes 6:00 - 7:00 PM",
+  "entrenadorId": 4
+}
+```
+
+#### Respuesta (200 OK)
+
+```json
 {
   "id": 12,
-  "nombre": "Yoga Avanzado",
-  "descripcion": "Clase enfocada en flexibilidad y respiración",
-  "cupoMaximo": 20,
-  "horario": "Lunes 7:00 AM",
+  "nombre": "Aerobicos Avanzado",
+  "cupoMaximo": 3,
+  "horario": "Lunes y Viernes 6:00 - 7:00 PM",
   "entrenador": {
-    "id": 3,
+    "id": 4,
     "nombre": "Carlos Ruiz",
-    "especialidad": "Yoga"
+    "especialidad": "Entrenamiento funcional"
   }
 }
+```
 
-Ejemplo (curl)
+#### Ejemplo (curl)
+
+```bash
 curl -X POST http://localhost:8080/api/admin/clases \
   -H "Content-Type: application/json" \
   -d '{
-        "nombre": "Yoga Avanzado",
-        "descripcion": "Clase enfocada en flexibilidad y respiración",
-        "cupoMaximo": 20,
-        "entrenadorId": 3,
-        "horario": "Lunes 7:00 AM"
+        "nombre": "Aerobicos Avanzado",
+        "cupoMaximo": 3,
+        "horario": "Lunes y Viernes 6:00 - 7:00 PM",
+        "entrenadorId": 4
       }'
+```
 
-Errores
+#### Errores
 
-400 Bad Request – El entrenador no existe o falta un campo obligatorio
+* `400 Bad Request` – El entrenador no existe o falta un campo obligatorio.
+* `500 Internal Server Error` – Error inesperado en el servidor.
 
-500 Internal Server Error
+---
 
-</details>
+### Editar Clase
 
-➤ Editar Clase
+**PUT** `/api/admin/clases/{id}`
 
-PUT /clases/{id}
-
-Descripción
+**Descripción**
 
 Actualiza los datos de una clase existente en el sistema.
 El identificador de la clase se envía en la URL y la información a modificar se recibe en el cuerpo de la solicitud.
 
-Request Body
+#### Request Body
 
+```json
 {
-  "nombre": "Yoga Intermedio",
-  "descripcion": "Clase centrada en postura y respiración",
-  "cupoMaximo": 18,
-  "entrenadorId": 3,
-  "horario": "Martes 6:30 PM"
+  "nombre": "Calistenia Básico",
+  "cupoMaximo": 2,
+  "horario": "Jueves y Viernes 6:00 - 7:00 PM",
+  "entrenadorId": 2
 }
+```
 
-Respuesta (200 OK)
+#### Respuesta (200 OK)
 
+```json
 {
   "id": 12,
-  "nombre": "Yoga Intermedio",
-  "descripcion": "Clase centrada en postura y respiración",
-  "cupoMaximo": 18,
-  "horario": "Martes 6:30 PM",
+  "nombre": "Calistenia Básico",
+  "cupoMaximo": 2,
+  "horario": "Jueves y Viernes 6:00 - 7:00 PM",
   "entrenador": {
-    "id": 3,
-    "nombre": "Carlos Ruiz",
-    "especialidad": "Yoga"
+    "id": 2,
+    "nombre": "Laura M. Morales",
+    "especialidad": "Entrenamiento funcional"
   }
 }
+```
 
-Ejemplo (curl)
-curl -X PUT http://localhost:8080/clases/12 \
+#### Ejemplo (curl)
+
+```bash
+curl -X PUT http://localhost:8080/api/admin/clases/12 \
   -H "Content-Type: application/json" \
   -d '{
-        "nombre": "Yoga Intermedio",
-        "descripcion": "Clase centrada en postura y respiración",
-        "cupoMaximo": 18,
-        "entrenadorId": 3,
-        "horario": "Martes 6:30 PM"
+        "nombre": "Calistenia Básico",
+        "cupoMaximo": 2,
+        "horario": "Jueves y Viernes 6:00 - 7:00 PM",
+        "entrenadorId": 2
       }'
+```
 
-Errores
+#### Errores
 
-400 Bad Request – Datos inválidos o falta un campo obligatorio
-404 Not Found – La clase con el ID especificado no existe
-500 Internal Server Error
+* `400 Bad Request` – Datos inválidos o falta un campo obligatorio.
+* `404 Not Found` – La clase con el ID especificado no existe.
+* `500 Internal Server Error` – Error inesperado en el servidor.
 
-</details>
+---
 
-➤ Listar Clases
+### Listar Clases
 
-GET /clases
+**GET** `/api/admin/clases`
 
-Descripción
+**Descripción**
 
 Obtiene la lista completa de clases registradas en el sistema.
 No requiere parámetros ni cuerpo en la solicitud.
 
-Respuesta (200 OK)
+#### Respuesta (200 OK)
 
+```json
 [
   {
     "id": 12,
-    "nombre": "Yoga Avanzado",
-    "descripcion": "Clase enfocada en flexibilidad y respiración",
-    "cupoMaximo": 20,
-    "horario": "Lunes 7:00 AM",
+    "nombre": "Aerobicos Avanzado",
+    "cupoMaximo": 3,
+    "horario": "Lunes y Viernes 6:00 - 7:00 PM",
     "entrenador": {
-      "id": 3,
+      "id": 4,
       "nombre": "Carlos Ruiz",
-      "especialidad": "Yoga"
+      "especialidad": "Entrenamiento funcional"
     }
   },
   {
     "id": 15,
     "nombre": "Crossfit Intermedio",
-    "descripcion": "Entrenamiento de alta intensidad",
     "cupoMaximo": 12,
     "horario": "Martes 6:00 PM",
     "entrenador": {
@@ -456,40 +519,50 @@ Respuesta (200 OK)
     }
   }
 ]
+```
 
-Ejemplo (curl)
-curl -X GET http://localhost:8080/clases
+#### Ejemplo (curl)
 
-Errores
+```bash
+curl -X GET http://localhost:8080/api/admin/clases
+```
 
-500 Internal Server Error
+#### Errores
 
-</details>
+* `500 Internal Server Error` – Error inesperado en el servidor.
 
-➤ Eliminar Clase
+---
 
-DELETE /clases/{id}
+### Eliminar Clase
 
-Descripción
+**DELETE** `/api/admin/clases/{id}`
+
+**Descripción**
 
 Elimina una clase existente del sistema utilizando su identificador único.
 No requiere cuerpo en la solicitud.
 
-Respuesta (200 OK)
+#### Respuesta (200 OK)
+
+```json
 {
   "message": "Clase eliminada correctamente"
 }
+```
 
-Ejemplo (curl)
-curl -X DELETE http://localhost:8080/clases/12
+#### Ejemplo (curl)
 
-Errores
+```bash
+curl -X DELETE http://localhost:8080/api/admin/clases/12
+```
 
-404 Not Found – La clase con el ID especificado no existe
-500 Internal Server Error
+#### Errores
 
-</details>
+* `404 Not Found` – La clase con el ID especificado no existe.
+* `500 Internal Server Error` – Error inesperado en el servidor.
 
-// -------------------- INSCRIPCIONES --------------------
+---
 
-➤
+## INSCRIPCIONES
+
+*Pendiente de documentar.*
