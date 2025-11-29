@@ -9,6 +9,8 @@ import org.groupfive.gymapi.Repository.EntrenadorRepository;
 import org.groupfive.gymapi.dto.ClaseResponse;
 import org.groupfive.gymapi.dto.ClaseRequest;
 import org.groupfive.gymapi.dto.EntrenadorResumen;
+import org.groupfive.gymapi.exception.BadRequestException;
+import org.groupfive.gymapi.exception.NotFoundException;
 import org.groupfive.gymapi.model.Clase;
 import org.groupfive.gymapi.model.Entrenador;
 import org.groupfive.gymapi.model.Inscripcion;
@@ -33,7 +35,7 @@ public class ClaseService {
 
     public ClaseResponse createClass(ClaseRequest createClassDTO) {
         Entrenador trainer = entrenadorRepository.findById(createClassDTO.getEntrenadorId())
-                .orElseThrow(()-> new RuntimeException("ENtrenador no encontrado"));
+                .orElseThrow(()-> new NotFoundException("ENtrenador no encontrado"));
 ;
             Clase clase = new Clase();
             clase.setNombre(createClassDTO.getNombre());
@@ -48,7 +50,7 @@ public class ClaseService {
     public ClaseResponse editorInfo(Long idClass, ClaseRequest classRequest) {
         return claseRepository.findById(idClass).map(c->{
                     Entrenador newTrainer = entrenadorRepository.findById(classRequest.getEntrenadorId())
-                            .orElseThrow(()-> new RuntimeException("Entrenador no encontrado"));
+                            .orElseThrow(()-> new NotFoundException("Entrenador no encontrado"));
             c.setNombre(classRequest.getNombre());
             c.setHorario(classRequest.getHorario());
             c.setCupoMaximo(classRequest.getCupoMaximo());
@@ -57,13 +59,13 @@ public class ClaseService {
                     return toResponse(c);
 
                 }).
-                orElseThrow(()-> new RuntimeException("Clase no encontrado"));
+                orElseThrow(()-> new NotFoundException("Clase no encontrado"));
 
     }
 
     public void eliminate(Long idClass) {
         if (!claseRepository.existsById(idClass))
-            throw new RuntimeException("Clase no encontrado");
+            throw new NotFoundException("Clase no encontrado");
         claseRepository.deleteById(idClass);
 
     }

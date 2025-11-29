@@ -2,6 +2,7 @@ package org.groupfive.gymapi.service;
 
 import lombok.RequiredArgsConstructor;
 import org.groupfive.gymapi.dto.*;
+import org.groupfive.gymapi.exception.NotFoundException;
 import org.groupfive.gymapi.model.*;
 import org.groupfive.gymapi.Repository.*;
 import org.springframework.stereotype.Service;
@@ -51,7 +52,7 @@ public class AdminService {
                     m.setSalario(entrenadorRequestDTO.getSalario());
                     return entrenadorRepository.save(m);
                 })
-                .orElseThrow(() -> new RuntimeException("Entrenador no encontrado"));
+                .orElseThrow(() -> new NotFoundException("Entrenador no encontrado"));
     }
 
     public List<Entrenador> listarEntrenadores() {
