@@ -12,7 +12,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.time.LocalTime;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -43,14 +42,14 @@ class EntrenadorServiceTest {
         clase = new Clase();
         clase.setId(10L);
         clase.setNombre("Pilates");
-        clase.setHorario(LocalTime.of(15, 30));
+        clase.setHorario("Martes 3:30 pm");
         clase.setCupoMaximo(15);
         clase.setEntrenador(entrenador);
 
         claseRequest = new ClaseRequest();
         claseRequest.setEntrenadorId(1L);
         claseRequest.setNombre("Pilates");
-        claseRequest.setHorario(LocalTime.of(15, 30));
+        claseRequest.setHorario("Martes 3:30 pm");
         claseRequest.setCupoMaximo(15);
     }
 
