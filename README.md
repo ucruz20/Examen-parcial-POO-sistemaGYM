@@ -591,4 +591,198 @@ public Inscripcion crear(Inscripcion inscripcion) {
 
         Actualiza los miembros 
 
-*Pendiente de documentar.*
+### Inscribir Miembro en una Clase
+
+**POST** `/api/admin/inscripciones?miembroId={miembroId}&claseId={claseId}`
+
+**Descripción**
+
+Inscribe un miembro en una clase.
+Los IDs se envían como parámetros de query (`miembroId` y `claseId`).
+El sistema valida que el miembro exista, que la clase exista, que no esté ya inscrito y que haya cupos disponibles.
+
+#### Parámetros (query)
+
+* `miembroId` (Long) – ID del miembro a inscribir
+* `claseId` (Long) – ID de la clase destino
+
+#### Ejemplo (curl)
+
+```bash
+curl -X POST "http://localhost:8080/api/admin/inscripciones?miembroId=7&claseId=4"
+```
+
+#### Respuesta (200 OK)
+
+```json
+{
+  "id": 2,
+  "fechaInscripcion": "2025-03-15",
+  "estado": "ACTIVA",
+  "miembro": {
+    "id": 7,
+    "nombre": "Juan Pérez"
+  },
+  "clase": {
+    "id": 4,
+    "nombre": "Aerobicos Avanzado"
+  }
+}
+```
+
+#### Errores
+
+* `400 Bad Request` –
+
+    * El miembro ya está inscrito en la clase
+    * La clase no tiene cupos disponibles
+    * IDs inválidos
+* `404 Not Found` – Miembro o clase no existen
+* `500 Internal Server Error` – Error inesperado en el servidor
+
+---
+
+### Listar Inscripciones
+
+**GET** `/api/admin/inscripciones`
+
+**Descripción**
+
+Obtiene la lista completa de inscripciones registradas en el sistema.
+
+#### Respuesta (200 OK)
+
+```json
+[
+  {
+    "id": 2,
+    "fechaInscripcion": "2025-03-15",
+    "estado": "ACTIVA",
+    "miembro": {
+      "id": 7,
+      "nombre": "Juan Pérez"
+    },
+    "clase": {
+      "id": 4,
+      "nombre": "Aerobicos Avanzado"
+    }
+  }
+]
+```
+
+#### Ejemplo (curl)
+
+```bash
+curl -X GET "http://localhost:8080/api/admin/inscripciones"
+```
+
+#### Errores
+
+* `500 Internal Server Error` – Error inesperado en el servidor
+
+---
+
+### Eliminar Inscripción
+
+**DELETE** `/api/admin/inscripciones/{id}`
+
+**Descripción**
+
+Elimina una inscripción existente utilizando su identificador único.
+
+#### Respuesta (200 OK)
+
+```json
+{
+  "message": "Inscripción eliminada correctamente"
+}
+```
+
+#### Ejemplo (curl)
+
+```bash
+curl -X DELETE "http://localhost:8080/api/admin/inscripciones/2"
+```
+
+#### Errores
+
+* `404 Not Found` – La inscripción con el ID especificado no existe
+* `500 Internal Server Error` – Error inesperado en el servidor
+
+---
+
+## ASISTENCIAS
+
+### Registrar Asistencia
+
+**POST** `/api/admin/asistencias?claseId={claseId}&miembroId={miembroId}`
+
+**Descripción**
+
+Registra la asistencia de un miembro a una clase.
+El sistema valida que el miembro esté inscrito en esa clase.
+
+#### Parámetros (query)
+
+* `claseId` (Long) – ID de la clase
+* `miembroId` (Long) – ID del miembro
+
+#### Ejemplo (curl)
+
+```bash
+curl -X POST "http://localhost:8080/api/admin/asistencias?claseId=4&miembroId=7"
+```
+
+#### Respuesta (200 OK)
+
+```json
+{
+  "message": "Asistencia registrada correctamente"
+}
+```
+
+#### Errores
+
+* `400 Bad Request` – El miembro no está inscrito en la clase o parámetros inválidos
+* `404 Not Found` – Miembro o clase no existen
+* `500 Internal Server Error` – Error inesperado en el servidor
+
+---
+
+### Listar Asistencias
+
+**GET** `/api/admin/asistencias`
+
+**Descripción**
+
+Obtiene la lista completa de asistencias registradas en el sistema.
+
+#### Respuesta (200 OK)
+
+```json
+[
+  {
+    "id": 1,
+    "fecha": "2025-03-15",
+    "miembroNombre": "Juan Pérez",
+    "claseNombre": "Aerobicos Avanzado"
+  },
+  {
+    "id": 2,
+    "fecha": "2025-03-16",
+    "miembroNombre": "María Gómez",
+    "claseNombre": "Calistenia Básico"
+  }
+]
+```
+
+#### Ejemplo (curl)
+
+```bash
+curl -X GET "http://localhost:8080/api/admin/asistencias"
+```
+
+#### Errores
+
+* `500 Internal Server Error` – Error inesperado en el servidor
+
