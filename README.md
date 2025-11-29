@@ -564,6 +564,32 @@ curl -X DELETE http://localhost:8080/api/admin/clases/12
 ---
 
 ## INSCRIPCIONES
+public Inscripcion crear(Inscripcion inscripcion) {
+        Miembro miembro = miembroService.obtenerPorId(inscripcion.getMiembro().getId());
+        Clase clase = claseService.obtenerClasePorId(inscripcion.getClase().getId());
+
+        inscripcion.setMiembro(miembro);
+        inscripcion.setClase(clase);
+        inscripcion.setFechaInscripcion(LocalDate.now());
+
+        return inscripcionRepository.save(inscripcion);
+    }
+    crea una inscripcion con fecha y la clase 
+
+    void testActualizarMiembro() {
+        // Mock del repositorio
+        MiembroRepository repo = mock(MiembroRepository.class);
+
+        // Servicio usando el mock
+        MiembroService service = new MiembroService(repo);
+
+        // Miembro existente en BD
+        Miembro existente = new Miembro();
+        existente.setId(Long.valueOf(1L));
+        existente.setNombre("Karen");
+        existente.setCorreo("karen@old.com");
+
+        Actualiza los miembros 
 
 ### Inscribir Miembro en una Clase
 
